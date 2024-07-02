@@ -2,3 +2,4 @@ rootProject.name = 'e-com-microservice'
 
 include('app')
 include('ecom-data')
+include('web')
