@@ -6,6 +6,7 @@ services:
     image: postgres:16.3
     environment:
       POSTGRES_PASSWORD: password
+      POSTGRES_DB: ecommo
     ports:
       - "2345:5432"
 

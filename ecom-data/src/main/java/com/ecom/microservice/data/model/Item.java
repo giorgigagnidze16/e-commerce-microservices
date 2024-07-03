@@ -31,30 +31,30 @@ public class Item {
     @Size(min = 3, max = 250)
     private String title;
 
-    @Column
+    @Column(nullable = false)
     @Size(min = 50, max = 500)
     private String description;
 
-    @Column
+    @Column(nullable = false)
     @DecimalMin(value = "0.01")
     private BigDecimal price;
 
-    @Column
+    @Column()
     @DecimalMin(value = "0.00")
     private BigDecimal discount;
 
-    @Column
+    @Column(nullable = false)
     @Min(0)
     private Long stock;
 
     @Column(columnDefinition = "boolean default false")
     private Boolean archived;
 
-    @Column(updatable = false)
+    @Column(updatable = false, nullable = false)
     @CreatedDate
     private LocalDateTime createdAt;
 
-    @Column
+    @Column(nullable = false)
     @LastModifiedDate
     private LocalDateTime updatedAt;
 }
