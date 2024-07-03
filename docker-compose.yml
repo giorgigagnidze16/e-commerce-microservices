@@ -2,11 +2,13 @@ version: '3.9'
 
 services:
   db:
-    container_name: service_db
+    container_name: postgre
     image: postgres:16.3
     environment:
-      POSTGRES_PASSWORD: password
       POSTGRES_DB: ecommo
+      POSTGRES_PASSWORD: password
+    volumes:
+      - ./db:/docker-entrypoint-initdb.d/
     ports:
       - "2345:5432"
 
