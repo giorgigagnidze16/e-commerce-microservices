@@ -1,4 +1,4 @@
-CREATE TABLE public.item
+CREATE TABLE public.product
 (
     id          serial                   primary key,
     title       text                        NOT NULL,

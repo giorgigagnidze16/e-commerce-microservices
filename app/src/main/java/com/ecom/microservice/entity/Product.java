@@ -1,4 +1,4 @@
-package com.ecom.microservice.data.model;
+package com.ecom.microservice.entity;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -22,7 +22,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 @Getter
 @Setter
 @ToString
-public class Item {
+public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -39,7 +39,7 @@ public class Item {
     @DecimalMin(value = "0.01")
     private BigDecimal price;
 
-    @Column()
+    @Column
     @DecimalMin(value = "0.00")
     private BigDecimal discount;
 

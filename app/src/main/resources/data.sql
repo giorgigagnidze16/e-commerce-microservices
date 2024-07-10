@@ -1,4 +1,4 @@
-INSERT INTO public.item (archived, discount, price, created_at, stock, updated_at, description, title)
+INSERT INTO public.product (archived, discount, price, created_at, stock, updated_at, description, title)
 VALUES (false, 0.00, 499.99, '2024-07-03 20:01:28.000000', 50, '2024-07-03 20:01:31.000000',
         'High-performance gaming laptop with the latest graphics card.', 'Gaming Laptop - GTX 3080, 16GB RAM, 1TB SSD'),
        (false, 0.00, 299.99, '2024-07-03 20:01:28.000000', 75, '2024-07-03 20:01:31.000000',
