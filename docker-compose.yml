@@ -12,11 +12,24 @@ services:
     ports:
       - "2345:5432"
 
-  mongo:
-    container_name: mongo_db
-    image: mongo:7.0
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: root
+#  mongo:
+#    container_name: mongo_db
+#    image: mongo:7.0
+#    environment:
+#      MONGO_INITDB_ROOT_USERNAME: root
+#      MONGO_INITDB_ROOT_PASSWORD: root
+#    ports:
+#      - "27016:27017"
+
+  minio:
+    image: quay.io/minio/minio
+    container_name: minio
     ports:
-      - "27016:27017"
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: root
+      MINIO_ROOT_PASSWORD: root12345
+    volumes:
+      - ./minio:/data
+    command: server /data --console-address ":9001"
