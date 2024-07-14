@@ -6,6 +6,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import com.ecom.microservice.api.model.CreateProductRequest;
+import com.ecom.microservice.api.model.ImageResponse;
 import com.ecom.microservice.api.model.ProductResponse;
 import com.ecom.microservice.entity.Image;
 import com.ecom.microservice.entity.Product;
@@ -39,6 +40,7 @@ public class ProductService {
 
     /**
      * Create a product listing
+     *
      * @param request details of listing
      * @return ProductResponse optional
      * @throws Exception if image upload failed, or jpa error occurs
@@ -59,6 +61,10 @@ public class ProductService {
     }
 
     private static ProductResponse mapToResponse(Product product) {
+        var attachments = product.getImages().stream()
+            .map(img -> new ImageResponse(img.getId(), img.getUrl()))
+            .toList();
+
         return ProductResponse.builder()
             .id(product.getId())
             .stock(product.getStock())
@@ -67,6 +73,7 @@ public class ProductService {
             .archived(product.getArchived())
             .title(product.getTitle())
             .description(product.getDescription())
+            .attachments(attachments)
             .createdAt(product.getCreatedAt())
             .updatedAt(product.getUpdatedAt())
             .build();
