@@ -9,7 +9,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
@@ -31,7 +31,7 @@ public class Manufacturer {
     @Column(nullable = false)
     private String name;
 
-    @OneToOne
+    @OneToMany
     @JoinColumn(name = "product_id")
     @ToString.Exclude
     private Product product;
