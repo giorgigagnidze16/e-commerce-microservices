@@ -14,6 +14,7 @@ import com.ecom.microservice.repository.ProductRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -34,8 +35,8 @@ public class ProductService {
      * @return product records from the database
      * @see ProductResponse
      */
-    public List<ProductResponse> searchAll() {
-        return repository.findAll().stream().map(ProductService::mapToResponse).toList();
+    public List<ProductResponse> search(PageRequest pageRequest) {
+        return repository.findAll(pageRequest).stream().map(ProductService::mapToResponse).toList();
     }
 
     /**
