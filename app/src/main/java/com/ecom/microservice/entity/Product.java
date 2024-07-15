@@ -11,8 +11,8 @@ import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Size;
@@ -68,6 +68,10 @@ public class Product {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "product")
     @ToString.Exclude
     private Set<Image> images;
+
+    @OneToOne(mappedBy = "product")
+    @ToString.Exclude
+    private Manufacturer manufacturer;
 
     public Product(String title, String description, BigDecimal price, BigDecimal discount, Long stock,
                    Boolean archived) {
