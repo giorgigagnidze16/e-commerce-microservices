@@ -7,6 +7,7 @@ import java.util.Set;
 
 import com.ecom.microservice.api.model.CreateProductRequest;
 import com.ecom.microservice.api.model.ImageResponse;
+import com.ecom.microservice.api.model.ManufacturerResponse;
 import com.ecom.microservice.api.model.ProductResponse;
 import com.ecom.microservice.entity.Image;
 import com.ecom.microservice.entity.Product;
@@ -26,8 +27,9 @@ import org.springframework.web.multipart.MultipartFile;
 @Transactional
 @RequiredArgsConstructor
 public class ProductService {
-    private final ProductRepository repository;
+    private final ProductRepository productRepository;
     private final ImageService imageService;
+    private final ManufacturerService manufacturerService;
 
     /**
      * Finds all products in the database.
@@ -36,7 +38,7 @@ public class ProductService {
      * @see ProductResponse
      */
     public List<ProductResponse> search(PageRequest pageRequest) {
-        return repository.findAll(pageRequest).stream().map(ProductService::mapToResponse).toList();
+        return productRepository.findAll(pageRequest).stream().map(ProductService::mapToResponse).toList();
     }
 
     /**
@@ -47,8 +49,10 @@ public class ProductService {
      * @throws Exception if image upload failed, or jpa error occurs
      */
     public Optional<ProductResponse> create(CreateProductRequest request) throws Exception {
+        var manufacturer = manufacturerService.findByName(request.manufacturer());
+
         var product = new Product(request.title(), request.description(), request.price(),
-            request.discount(), request.stock(), request.archived());
+            request.discount(), request.stock(), request.archived(), manufacturer);
 
         Set<Image> images = new HashSet<>();
         for (MultipartFile file : request.files()) {
@@ -58,7 +62,7 @@ public class ProductService {
 
         product.setImages(images);
 
-        return Optional.of(repository.save(product)).map(ProductService::mapToResponse);
+        return Optional.of(productRepository.save(product)).map(ProductService::mapToResponse);
     }
 
     private static ProductResponse mapToResponse(Product product) {
@@ -75,6 +79,12 @@ public class ProductService {
             .title(product.getTitle())
             .description(product.getDescription())
             .attachments(attachments)
+            .manufacturer(
+                new ManufacturerResponse(
+                    product.getManufacturer().getId(),
+                    product.getManufacturer().getName()
+                )
+            )
             .createdAt(product.getCreatedAt())
             .updatedAt(product.getUpdatedAt())
             .build();

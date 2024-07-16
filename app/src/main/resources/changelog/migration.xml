@@ -3,4 +3,8 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
     <include file="/changelog/20240710144210_create_image_table.sql"
              relativeToChangelogFile="false"/>
+    <include file="/changelog/20240715221910_create_manufacturer_table.sql"
+             relativeToChangelogFile="false"/>
+    <include file="/changelog/20240716210755_add_manufacturer_name_index.sql"
+             relativeToChangelogFile="false"/>
 </databaseChangeLog>

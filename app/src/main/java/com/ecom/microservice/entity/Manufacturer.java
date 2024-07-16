@@ -8,12 +8,9 @@ import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -31,11 +28,6 @@ public class Manufacturer {
     @Column(nullable = false)
     private String name;
 
-    @OneToMany
-    @JoinColumn(name = "product_id")
-    @ToString.Exclude
-    private Product product;
-
     @Column(updatable = false, nullable = false)
     @CreatedDate
     private LocalDateTime createdAt;
@@ -43,6 +35,13 @@ public class Manufacturer {
     @Column(nullable = false)
     @LastModifiedDate
     private LocalDateTime updatedAt;
+
+    public Manufacturer(String name) {
+        this.name = name;
+    }
+
+    public Manufacturer() {
+    }
 
     @Override
     public boolean equals(Object o) {
