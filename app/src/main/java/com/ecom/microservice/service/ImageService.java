@@ -10,7 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 @RequiredArgsConstructor
 public class ImageService {
-    private final Minio minio;
+    private final MinioService minio;
 
     /**
      * Uploads images to S3 bucket and gets resource url.
