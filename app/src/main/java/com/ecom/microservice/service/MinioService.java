@@ -20,12 +20,12 @@ import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
-class Minio {
+class MinioService {
     private final MinioClient client;
     private final String bucket;
     private final String url;
 
-    Minio(
+    MinioService(
         @Value("${app.minio.url}") String url,
         @Value("${app.minio.bucket}") String bucket,
         @Value("${app.minio.username}") String username,

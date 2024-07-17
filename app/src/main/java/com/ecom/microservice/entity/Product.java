@@ -11,7 +11,7 @@ import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
@@ -69,14 +69,21 @@ public class Product {
     @ToString.Exclude
     private Set<Image> images;
 
-    public Product(String title, String description, BigDecimal price, BigDecimal discount, Long stock,
-                   Boolean archived) {
+    @ManyToOne
+    @ToString.Exclude
+    private Manufacturer manufacturer;
+
+    public Product(String title, String description,
+                   BigDecimal price, BigDecimal discount,
+                   Long stock, Boolean archived,
+                   Manufacturer manufacturer) {
         this.title = title;
         this.description = description;
         this.price = price;
         this.discount = discount;
         this.stock = stock;
         this.archived = archived;
+        this.manufacturer = manufacturer;
     }
 
     public Product() {
