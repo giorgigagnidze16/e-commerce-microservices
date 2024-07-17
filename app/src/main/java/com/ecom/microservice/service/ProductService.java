@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import com.ecom.microservice.api.exception.ResourceNotFoundException;
 import com.ecom.microservice.api.model.CreateProductRequest;
 import com.ecom.microservice.api.model.ImageResponse;
 import com.ecom.microservice.api.model.ManufacturerResponse;
@@ -32,13 +33,13 @@ public class ProductService {
     private final ManufacturerService manufacturerService;
 
     /**
-     * Finds all products in the database.
+     * Finds all active products in the database.
      *
      * @return product records from the database
      * @see ProductResponse
      */
     public List<ProductResponse> search(PageRequest pageRequest) {
-        return productRepository.findAll(pageRequest).stream().map(ProductService::mapToResponse).toList();
+        return productRepository.findAllByArchived(false, pageRequest).stream().map(ProductService::mapToResponse).toList();
     }
 
     /**
@@ -63,6 +64,19 @@ public class ProductService {
         product.setImages(images);
 
         return Optional.of(productRepository.save(product)).map(ProductService::mapToResponse);
+    }
+
+    /**
+     * Updates product visibility by id.
+     *
+     * @param id       of product
+     * @param archived true or false depending on if a person wants to hide/show product.
+     */
+    public void updateProductVisibility(Long id, boolean archived) {
+        if (productRepository.updateVisibility(id, archived) <= 0) {
+            log.warn("Product with id: {} does not exist", id);
+            throw new ResourceNotFoundException("Couldn't find a product with id: " + id);
+        }
     }
 
     private static ProductResponse mapToResponse(Product product) {
