@@ -30,4 +30,15 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query("UPDATE Product p set p.archived= :archived where p.id = :id")
     int updateVisibility(Long id, boolean archived);
 
+
+    /**
+     *
+     * @param id of product
+     * @param price new product price
+     * @return number of updated rows
+     * @see Product
+     */
+    @Modifying
+    @Query("UPDATE Product p set p.price= :price where p.id= :id")
+    int updatePrice(Long id, Double price);
 }

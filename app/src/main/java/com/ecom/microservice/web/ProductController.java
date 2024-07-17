@@ -66,9 +66,20 @@ public class ProductController {
         @ApiResponse(responseCode = "200", description = "Updated successfully"),
         @ApiResponse(responseCode = "404", description = "Product not found")
     })
-    @PatchMapping("/{id}/")
+    @PatchMapping("/{id}/archive")
     public void archive(@PathVariable Long id, @RequestParam boolean archived) {
         log.debug("Received archive request, archived: {}", archived);
         productService.updateProductVisibility(id, archived);
+    }
+
+    @Operation(summary = "Update product price", description = "Set a new price for a product")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Updated successfully"),
+        @ApiResponse(responseCode = "404", description = "Product not found")
+    })
+    @PatchMapping("/{id}/price/{price}")
+    public void updatePrice(@PathVariable Long id, @PathVariable Double price) {
+        log.debug("Received price update request for: {}, new price: {}", id, price);
+        productService.updateProductPrice(id, price);
     }
 }
