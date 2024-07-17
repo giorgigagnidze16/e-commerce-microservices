@@ -39,8 +39,7 @@ public class ProductService {
      * @see ProductResponse
      */
     public List<ProductResponse> search(PageRequest pageRequest) {
-        return productRepository.findAll(pageRequest).stream().map(ProductService::mapToResponse).toList();
-        return repository.findAllByArchived(false, pageRequest).stream().map(ProductService::mapToResponse).toList();
+        return productRepository.findAllByArchived(false, pageRequest).stream().map(ProductService::mapToResponse).toList();
     }
 
     /**
@@ -74,7 +73,7 @@ public class ProductService {
      * @param archived true or false depending on if a person wants to hide/show product.
      */
     public void updateProductVisibility(Long id, boolean archived) {
-        if (repository.updateVisibility(id, archived) <= 0) {
+        if (productRepository.updateVisibility(id, archived) <= 0) {
             log.warn("Product with id: {} does not exist", id);
             throw new ResourceNotFoundException("Couldn't find a product with id: " + id);
         }
