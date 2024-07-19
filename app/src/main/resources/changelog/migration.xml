@@ -9,4 +9,6 @@
              relativeToChangelogFile="false"/>
     <include file="/changelog/202407181501_add_product_categories.sql"
              relativeToChangelogFile="false"/>
+    <include file="/changelog/202407191343_add_unique_index_on_categories.sql"
+             relativeToChangelogFile="false"/>
 </databaseChangeLog>

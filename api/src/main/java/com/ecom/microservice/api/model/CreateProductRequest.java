@@ -1,6 +1,7 @@
 package com.ecom.microservice.api.model;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
@@ -21,11 +22,13 @@ import org.springframework.web.multipart.MultipartFile;
  * @param archived     if listing is archived or not
  * @param files        image attachments
  * @param manufacturer of the product
+ * @param categories category ids
  */
 public record CreateProductRequest(@NotBlank @Size(min = 3, max = 400) String title,
                                    @NotBlank @Size(min = 50, max = 760) String description,
                                    @NotNull @DecimalMin(value = "0.0", inclusive = false) BigDecimal price,
                                    @NotNull @DecimalMin(value = "0.0") BigDecimal discount,
                                    @NotNull @Min(1) Long stock, @NotNull Boolean archived,
-                                   @NotEmpty MultipartFile[] files, @NotNull String manufacturer) {
+                                   @NotEmpty MultipartFile[] files, @NotNull String manufacturer,
+                                   @NotNull List<Long> categories) {
 }

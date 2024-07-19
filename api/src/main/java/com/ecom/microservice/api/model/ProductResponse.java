@@ -26,6 +26,6 @@ public record ProductResponse(Long id, Long stock,
                               Boolean archived, String title,
                               String description, BigDecimal price,
                               BigDecimal discount, List<ImageResponse> attachments,
-                              ManufacturerResponse manufacturer, LocalDateTime createdAt,
-                              LocalDateTime updatedAt) {
+                              ManufacturerResponse manufacturer, List<CategoryResponse> categories,
+                              LocalDateTime createdAt, LocalDateTime updatedAt) {
 }
