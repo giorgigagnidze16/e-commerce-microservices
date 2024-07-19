@@ -11,6 +11,9 @@ import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.DecimalMin;
@@ -27,7 +30,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Entity
 @Getter
 @Setter
-@ToString
 @EntityListeners(AuditingEntityListener.class)
 public class Product {
     @Id
@@ -72,6 +74,13 @@ public class Product {
     @ManyToOne
     @ToString.Exclude
     private Manufacturer manufacturer;
+
+    @ManyToMany
+    @JoinTable(name = "product_categories_rel",
+        joinColumns = @JoinColumn(name = "product_id"),
+        inverseJoinColumns = @JoinColumn(name = "category_id"))
+    @ToString.Exclude
+    private Set<Category> category;
 
     public Product(String title, String description,
                    BigDecimal price, BigDecimal discount,

@@ -7,4 +7,6 @@
              relativeToChangelogFile="false"/>
     <include file="/changelog/20240716210755_add_manufacturer_name_index.sql"
              relativeToChangelogFile="false"/>
+    <include file="/changelog/202407181501_add_product_categories.sql"
+             relativeToChangelogFile="false"/>
 </databaseChangeLog>
