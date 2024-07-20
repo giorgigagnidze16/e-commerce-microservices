@@ -1,8 +1,10 @@
 package com.ecom.microservice.web;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.ecom.microservice.api.model.CreateProductRequest;
+import com.ecom.microservice.api.model.PriceRange;
 import com.ecom.microservice.api.model.ProductResponse;
 import com.ecom.microservice.service.ProductService;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
@@ -43,9 +45,15 @@ public class ProductController {
     )
     @GetMapping
     public List<ProductResponse> search(
+        @RequestParam String query,
+        @RequestParam(required = false) Long manufacturer,
+        @RequestParam(required = false, defaultValue = "") List<Long> categories,
+        @RequestParam(required = false) BigDecimal minPrice,
+        @RequestParam(required = false) BigDecimal maxPrice,
         @Parameter(description = "Page Index") @RequestParam(value = "i", defaultValue = "0") int page,
         @Parameter(description = "Page Size") @RequestParam(value = "s", defaultValue = "20") int size) {
-        return productService.search(PageRequest.of(page, size));
+        var range = new PriceRange(minPrice, maxPrice);
+        return productService.search(query, manufacturer, categories, range, PageRequest.of(page, size));
     }
 
     @Operation(
