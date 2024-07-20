@@ -17,6 +17,7 @@ import com.ecom.microservice.entity.Image;
 import com.ecom.microservice.entity.Product;
 import com.ecom.microservice.repository.ProductRepository;
 import jakarta.transaction.Transactional;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -87,6 +88,19 @@ public class ProductService {
      */
     public void updateProductVisibility(Long id, boolean archived) {
         if (productRepository.updateVisibility(id, archived) <= 0) {
+            log.warn("Product with id: {} does not exist", id);
+            throw new ResourceNotFoundException("Couldn't find a product with id: " + id);
+        }
+    }
+
+    /**
+     * Updates product price by id.
+     *
+     * @param id    of product
+     * @param price new price of a product.
+     */
+    public void updateProductPrice(@NotNull Long id, @NotNull final Double price) {
+        if (productRepository.updatePrice(id, price) <= 0) {
             log.warn("Product with id: {} does not exist", id);
             throw new ResourceNotFoundException("Couldn't find a product with id: " + id);
         }
