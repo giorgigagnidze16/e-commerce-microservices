@@ -4,24 +4,26 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import com.ecom.microservice.api.exception.ResourceNotFoundException;
 import com.ecom.microservice.api.model.CategoryResponse;
 import com.ecom.microservice.api.model.CreateProductRequest;
 import com.ecom.microservice.api.model.ImageResponse;
 import com.ecom.microservice.api.model.ManufacturerResponse;
+import com.ecom.microservice.api.model.PriceRange;
 import com.ecom.microservice.api.model.ProductResponse;
-import com.ecom.microservice.entity.Category;
 import com.ecom.microservice.entity.Image;
 import com.ecom.microservice.entity.Product;
 import com.ecom.microservice.repository.ProductRepository;
+import com.ecom.microservice.web.validation.annotation.ValidPriceRange;
+import jakarta.annotation.Nullable;
 import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -30,6 +32,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Slf4j
 @Service
 @Transactional
+@Validated
 @RequiredArgsConstructor
 public class ProductService {
     private final ProductRepository productRepository;
@@ -37,14 +40,29 @@ public class ProductService {
     private final CategoriesService categoriesService;
     private final ManufacturerService manufacturerService;
 
+
     /**
-     * Finds all active products in the database.
+     * Finds products in the database according to a search query
+     * with a full text search in product title and description.
      *
+     * @param query        search query
+     * @param manufacturer of product
+     * @param categories   of product
+     * @param range        price range
      * @return product records from the database
      * @see ProductResponse
      */
-    public List<ProductResponse> search(PageRequest pageRequest) {
-        return productRepository.findAllByArchived(false, pageRequest).stream().map(ProductService::mapToResponse)
+    public List<ProductResponse> search(
+        @NotNull String query,
+        @Nullable Long manufacturer,
+        @NotNull List<Long> categories,
+        @ValidPriceRange PriceRange range,
+        @NotNull Pageable pageable
+    ) {
+        log.debug("Received a search query: {}, Price range: {}", query, range);
+        return productRepository.findByQuery(query, range.min(), range.max(), manufacturer, categories, pageable)
+            .stream()
+            .map(ProductService::mapToResponse)
             .toList();
     }
 
