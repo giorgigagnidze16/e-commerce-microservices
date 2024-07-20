@@ -4,12 +4,15 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.ecom.microservice.api.exception.ResourceNotFoundException;
+import com.ecom.microservice.api.model.CategoryResponse;
 import com.ecom.microservice.api.model.CreateProductRequest;
 import com.ecom.microservice.api.model.ImageResponse;
 import com.ecom.microservice.api.model.ManufacturerResponse;
 import com.ecom.microservice.api.model.ProductResponse;
+import com.ecom.microservice.entity.Category;
 import com.ecom.microservice.entity.Image;
 import com.ecom.microservice.entity.Product;
 import com.ecom.microservice.repository.ProductRepository;
@@ -30,6 +33,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class ProductService {
     private final ProductRepository productRepository;
     private final ImageService imageService;
+    private final CategoriesService categoriesService;
     private final ManufacturerService manufacturerService;
 
     /**
@@ -39,7 +43,8 @@ public class ProductService {
      * @see ProductResponse
      */
     public List<ProductResponse> search(PageRequest pageRequest) {
-        return productRepository.findAllByArchived(false, pageRequest).stream().map(ProductService::mapToResponse).toList();
+        return productRepository.findAllByArchived(false, pageRequest).stream().map(ProductService::mapToResponse)
+            .toList();
     }
 
     /**
@@ -52,6 +57,13 @@ public class ProductService {
     public Optional<ProductResponse> create(CreateProductRequest request) throws Exception {
         var manufacturer = manufacturerService.findByName(request.manufacturer());
 
+        var categories = categoriesService.findByIds(request.categories());
+
+        if (categories.isEmpty()) {
+            log.debug("Categories not found by given ids {}", request.categories());
+            throw new ResourceNotFoundException("Categories not found by given ids: " + request.categories());
+        }
+
         var product = new Product(request.title(), request.description(), request.price(),
             request.discount(), request.stock(), request.archived(), manufacturer);
 
@@ -62,6 +74,7 @@ public class ProductService {
         }
 
         product.setImages(images);
+        product.setCategory(new HashSet<>(categories));
 
         return Optional.of(productRepository.save(product)).map(ProductService::mapToResponse);
     }
@@ -84,6 +97,10 @@ public class ProductService {
             .map(img -> new ImageResponse(img.getId(), img.getUrl()))
             .toList();
 
+        var categories = product.getCategory().stream()
+            .map(category -> new CategoryResponse(category.getId(), category.getName()))
+            .toList();
+
         return ProductResponse.builder()
             .id(product.getId())
             .stock(product.getStock())
@@ -93,6 +110,7 @@ public class ProductService {
             .title(product.getTitle())
             .description(product.getDescription())
             .attachments(attachments)
+            .categories(categories)
             .manufacturer(
                 new ManufacturerResponse(
                     product.getManufacturer().getId(),
