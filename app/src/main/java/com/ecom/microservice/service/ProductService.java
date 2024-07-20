@@ -59,6 +59,7 @@ public class ProductService {
         @ValidPriceRange PriceRange range,
         @NotNull Pageable pageable
     ) {
+        log.debug("Received a search query: {}, Price range: {}", query, range);
         return productRepository.findByQuery(query, range.min(), range.max(), manufacturer, categories, pageable)
             .stream()
             .map(ProductService::mapToResponse)
