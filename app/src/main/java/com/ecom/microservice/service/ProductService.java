@@ -60,7 +60,9 @@ public class ProductService {
         @NotNull Pageable pageable
     ) {
         return productRepository.findByQuery(query, range.min(), range.max(), manufacturer, categories, pageable)
-            .stream().map(ProductService::mapToResponse).toList();
+            .stream()
+            .map(ProductService::mapToResponse)
+            .toList();
     }
 
     /**
