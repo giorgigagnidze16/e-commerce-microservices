@@ -1,26 +1,38 @@
 package com.ecom.microservice.web.config;
 
+import com.ecom.microservice.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
 @Configuration
+@RequiredArgsConstructor
 public class UserManagementConfig {
+    private final UserRepository userRepository;
+
     @Bean
     UserDetailsService userDetailsService() {
-        var user = User.withUsername("john")
-            .password("12345")
-            .authorities("read")
-            .build();
-        return new InMemoryUserDetailsManager(user);
+        return username -> userRepository.findByEmail(username)
+            .orElseThrow(() -> new UsernameNotFoundException("User " + username + " not found"));
     }
 
     @Bean
     PasswordEncoder passwordEncoder() {
-        return NoOpPasswordEncoder.getInstance();
+        return new BCryptPasswordEncoder();
     }
+
+    @Bean
+    AuthenticationProvider authenticationProvider() {
+        var provider = new DaoAuthenticationProvider();
+        provider.setPasswordEncoder(passwordEncoder());
+        provider.setUserDetailsService(userDetailsService());
+        return provider;
+    }
+
 }
