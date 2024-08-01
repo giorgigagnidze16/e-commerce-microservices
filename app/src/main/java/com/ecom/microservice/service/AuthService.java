@@ -8,11 +8,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
 /**
  * Service responsible for authentication.
  */
 @Service
+@Validated
 @RequiredArgsConstructor
 public class AuthService {
     private final JwtService jwtService;

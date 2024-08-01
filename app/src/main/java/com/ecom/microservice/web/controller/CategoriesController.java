@@ -1,4 +1,4 @@
-package com.ecom.microservice.web;
+package com.ecom.microservice.web.controller;
 
 
 import com.ecom.microservice.api.model.CategoryResponse;
