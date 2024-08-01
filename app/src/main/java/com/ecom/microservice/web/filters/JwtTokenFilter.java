@@ -20,6 +20,9 @@ import java.util.List;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
+/**
+ * Http filter for JWT token authorization
+ */
 @Component
 @RequiredArgsConstructor
 public class JwtTokenFilter extends OncePerRequestFilter {
