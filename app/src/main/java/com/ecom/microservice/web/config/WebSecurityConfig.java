@@ -24,7 +24,8 @@ public class WebSecurityConfig {
                 .cors(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(configurer ->
-                        configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                        configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
                 .authorizeHttpRequests(c -> c
                         .requestMatchers(HttpMethod.GET, "/product").permitAll()
                         .requestMatchers("/login", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
