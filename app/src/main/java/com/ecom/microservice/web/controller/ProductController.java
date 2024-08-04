@@ -1,4 +1,4 @@
-package com.ecom.microservice.web;
+package com.ecom.microservice.web.controller;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -29,11 +29,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 
+@Tag(name = "Product")
+@OpenAPIDefinition(tags = @Tag(name = "Product", description = "Products controller"))
 @Slf4j
 @AllArgsConstructor
 @Validated
-@Tag(name = "Product")
-@OpenAPIDefinition(tags = @Tag(name = "Product", description = "Products controller"))
 @RestController
 @RequestMapping("/product")
 public class ProductController {

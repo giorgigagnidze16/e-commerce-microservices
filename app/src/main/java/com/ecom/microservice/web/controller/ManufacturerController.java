@@ -1,4 +1,4 @@
-package com.ecom.microservice.web;
+package com.ecom.microservice.web.controller;
 
 import java.util.List;
 
