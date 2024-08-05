@@ -21,18 +21,19 @@ public class WebSecurityConfig {
     @Bean
     SecurityFilterChain configure(HttpSecurity http) throws Exception {
         return http
-                .cors(AbstractHttpConfigurer::disable)
-                .csrf(AbstractHttpConfigurer::disable)
-                .sessionManagement(configurer ->
-                        configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                )
-                .authorizeHttpRequests(c -> c
-                        .requestMatchers(HttpMethod.GET, "/product").permitAll()
-                        .requestMatchers("/login", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                        .anyRequest()
-                        .authenticated()
-                )
-                .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
-                .build();
+            .cors(AbstractHttpConfigurer::disable)
+            .csrf(AbstractHttpConfigurer::disable)
+            .sessionManagement(configurer ->
+                configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            )
+            .authorizeHttpRequests(c -> c
+                .requestMatchers(HttpMethod.GET, "/product").permitAll()
+                .requestMatchers("/login", "/swagger-ui/**", "/v3/api-docs/**")
+                .permitAll()
+                .anyRequest()
+                .authenticated()
+            )
+            .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
+            .build();
     }
 }
