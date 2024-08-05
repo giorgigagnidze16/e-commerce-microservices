@@ -28,7 +28,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
      * @return List of found products
      */
     @Query(value = """
-        SELECT p.id, p.title, p.description, p.price, p.discount, p.stock, p.archived, p.created_at, p.updated_at, p.manufacturer_id
+        SELECT p.id, p.title, p.description, p.price, p.discount, p.stock, p.archived, p.created_at, p.updated_at, p.manufacturer_id, p.seller_id
         FROM ecommo.product p
                  INNER JOIN (SELECT DISTINCT p.id
                              FROM ecommo.product p

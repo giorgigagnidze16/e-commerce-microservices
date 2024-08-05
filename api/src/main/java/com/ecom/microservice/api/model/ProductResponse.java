@@ -22,10 +22,13 @@ import lombok.Builder;
  * @param updatedAt    listing update timestamp
  */
 @Builder
-public record ProductResponse(Long id, Long stock,
-                              Boolean archived, String title,
-                              String description, BigDecimal price,
-                              BigDecimal discount, List<ImageResponse> attachments,
-                              ManufacturerResponse manufacturer, List<CategoryResponse> categories,
-                              LocalDateTime createdAt, LocalDateTime updatedAt) {
+public record ProductResponse(
+    Long id, Long stock,
+    Boolean archived, String title,
+    String description, BigDecimal price,
+    BigDecimal discount, List<ImageResponse> attachments,
+    ManufacturerResponse manufacturer, List<CategoryResponse> categories,
+    UserResponse seller,
+    LocalDateTime createdAt, LocalDateTime updatedAt
+) {
 }

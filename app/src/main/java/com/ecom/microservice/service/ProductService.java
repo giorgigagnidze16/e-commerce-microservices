@@ -13,6 +13,7 @@ import com.ecom.microservice.api.model.ImageResponse;
 import com.ecom.microservice.api.model.ManufacturerResponse;
 import com.ecom.microservice.api.model.PriceRange;
 import com.ecom.microservice.api.model.ProductResponse;
+import com.ecom.microservice.api.model.UserResponse;
 import com.ecom.microservice.entity.Image;
 import com.ecom.microservice.entity.Product;
 import com.ecom.microservice.repository.ProductRepository;
@@ -147,6 +148,8 @@ public class ProductService {
             .map(category -> new CategoryResponse(category.getId(), category.getName()))
             .toList();
 
+        var seller = product.getSeller();
+
         return ProductResponse.builder()
             .id(product.getId())
             .stock(product.getStock())
@@ -161,6 +164,13 @@ public class ProductService {
                 new ManufacturerResponse(
                     product.getManufacturer().getId(),
                     product.getManufacturer().getName()
+                )
+            )
+            .seller(
+                new UserResponse(
+                    seller.getFirstname(),
+                    seller.getLastname(),
+                    seller.getEmail()
                 )
             )
             .createdAt(product.getCreatedAt())

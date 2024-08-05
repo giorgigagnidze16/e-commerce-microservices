@@ -78,7 +78,7 @@ public class Product {
     @ManyToOne
     @JoinColumn(nullable = false, name = "seller_id", referencedColumnName = "id")
     @ToString.Exclude
-    private User user;
+    private User seller;
 
     @ManyToMany
     @JoinTable(name = "product_categories_rel",
@@ -91,7 +91,7 @@ public class Product {
                    BigDecimal price, BigDecimal discount,
                    Long stock, Boolean archived,
                    Manufacturer manufacturer,
-                   User user) {
+                   User seller) {
         this.title = title;
         this.description = description;
         this.price = price;
@@ -99,7 +99,7 @@ public class Product {
         this.stock = stock;
         this.archived = archived;
         this.manufacturer = manufacturer;
-        this.user = user;
+        this.seller = seller;
     }
 
     public Product() {
