@@ -1,5 +1,6 @@
 package com.ecom.microservice.service;
 
+import java.security.Principal;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -15,9 +16,11 @@ import com.ecom.microservice.api.model.ProductResponse;
 import com.ecom.microservice.entity.Image;
 import com.ecom.microservice.entity.Product;
 import com.ecom.microservice.repository.ProductRepository;
+import com.ecom.microservice.repository.UserRepository;
 import com.ecom.microservice.web.validation.annotation.ValidPriceRange;
 import jakarta.annotation.Nullable;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,7 +38,9 @@ import org.springframework.web.multipart.MultipartFile;
 @Validated
 @RequiredArgsConstructor
 public class ProductService {
+    private final UserRepository userRepository;
     private final ProductRepository productRepository;
+
     private final ImageService imageService;
     private final CategoriesService categoriesService;
     private final ManufacturerService manufacturerService;
@@ -73,7 +78,16 @@ public class ProductService {
      * @return ProductResponse optional
      * @throws Exception if image upload failed, or jpa error occurs
      */
-    public Optional<ProductResponse> create(CreateProductRequest request) throws Exception {
+    public Optional<ProductResponse> create(
+        @NotNull @Valid CreateProductRequest request,
+        @NotNull Principal principal
+    ) throws Exception {
+        var seller = userRepository.findByEmail(principal.getName());
+
+        if (seller.isEmpty()) {
+            throw new ResourceNotFoundException("User with given email not found " + principal.getName());
+        }
+
         var manufacturer = manufacturerService.findByName(request.manufacturer());
 
         var categories = categoriesService.findByIds(request.categories());
@@ -84,7 +98,7 @@ public class ProductService {
         }
 
         var product = new Product(request.title(), request.description(), request.price(),
-            request.discount(), request.stock(), request.archived(), manufacturer);
+            request.discount(), request.stock(), request.archived(), manufacturer, seller.get());
 
         Set<Image> images = new HashSet<>();
         for (MultipartFile file : request.files()) {
