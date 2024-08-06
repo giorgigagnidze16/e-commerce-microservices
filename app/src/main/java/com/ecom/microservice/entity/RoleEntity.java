@@ -21,7 +21,7 @@ import org.hibernate.proxy.HibernateProxy;
 @RequiredArgsConstructor
 @Entity
 @Table(name = "roles")
-public class Role {
+public class RoleEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -45,7 +45,7 @@ public class Role {
         if (thisEffectiveClass != oEffectiveClass) {
             return false;
         }
-        Role role = (Role) o;
+        RoleEntity role = (RoleEntity) o;
         return getId() != null && Objects.equals(getId(), role.getId());
     }
 
