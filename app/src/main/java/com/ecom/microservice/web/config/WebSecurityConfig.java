@@ -16,6 +16,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class WebSecurityConfig {
+    /**
+     * Publicly available endpoints.
+     */
+    private final static String[] PUBLIC_URLS = {"/swagger-ui/**", "/v3/api-docs/**", "/login", "/signup"};
+
     private final JwtTokenFilter jwtTokenFilter;
 
     @Bean
@@ -27,8 +32,9 @@ public class WebSecurityConfig {
                 configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
             .authorizeHttpRequests(c -> c
-                .requestMatchers(HttpMethod.GET, "/product").permitAll()
-                .requestMatchers("/login", "/swagger-ui/**", "/v3/api-docs/**")
+                .requestMatchers(PUBLIC_URLS)
+                .permitAll()
+                .requestMatchers(HttpMethod.GET, "/product")
                 .permitAll()
                 .anyRequest()
                 .authenticated()
