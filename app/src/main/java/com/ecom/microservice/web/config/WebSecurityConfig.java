@@ -1,5 +1,6 @@
 package com.ecom.microservice.web.config;
 
+import com.ecom.microservice.api.model.Roles;
 import com.ecom.microservice.web.filters.JwtTokenFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -36,6 +37,7 @@ public class WebSecurityConfig {
                 .permitAll()
                 .requestMatchers(HttpMethod.GET, "/product")
                 .permitAll()
+                .requestMatchers("/***").hasAuthority(Roles.ADMIN.name())
                 .anyRequest()
                 .authenticated()
             )

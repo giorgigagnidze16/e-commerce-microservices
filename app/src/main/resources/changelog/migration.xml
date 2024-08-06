@@ -15,4 +15,6 @@
              relativeToChangelogFile="false"/>
     <include file="/changelog/20240801_alter_admin.sql"
              relativeToChangelogFile="false"/>
+    <include file="/changelog/202408052341_add_seller_product_relation.sql"
+             relativeToChangelogFile="false"/>
 </databaseChangeLog>

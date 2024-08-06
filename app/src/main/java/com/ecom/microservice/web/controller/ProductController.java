@@ -1,6 +1,7 @@
 package com.ecom.microservice.web.controller;
 
 import java.math.BigDecimal;
+import java.security.Principal;
 import java.util.List;
 
 import com.ecom.microservice.api.model.CreateProductRequest;
@@ -13,6 +14,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -62,10 +64,11 @@ public class ProductController {
     )
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ProductResponse> create(
-        @ModelAttribute CreateProductRequest request
+        @ModelAttribute CreateProductRequest request,
+        @NotNull Principal principal
     ) throws Exception {
-        log.debug("Received product creation request {}", request);
-        return ResponseEntity.of(productService.create(request));
+        log.debug("Received product creation request {} from user {}", request, principal.getName());
+        return ResponseEntity.of(productService.create(request, principal));
     }
 
 
