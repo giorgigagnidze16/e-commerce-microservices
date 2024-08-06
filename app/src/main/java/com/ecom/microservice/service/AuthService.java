@@ -28,11 +28,10 @@ import org.springframework.validation.annotation.Validated;
 @RequiredArgsConstructor
 public class AuthService {
     private final JwtService jwtService;
-    private final AuthenticationProvider authenticationProvider;
-
     private final PasswordEncoder encoder;
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final AuthenticationProvider authenticationProvider;
 
     /**
      * Authenticates user with password credentials.
