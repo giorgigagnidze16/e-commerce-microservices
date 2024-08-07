@@ -5,6 +5,9 @@ import com.ecom.microservice.api.exception.ResourceAlreadyExistsException;
 import com.ecom.microservice.api.exception.ResourceNotFoundException;
 import com.ecom.microservice.api.model.AuthRequest;
 import com.ecom.microservice.api.model.AuthResponse;
+import com.ecom.microservice.api.model.NotificationDetails;
+import com.ecom.microservice.api.model.NotificationEvent;
+import com.ecom.microservice.api.model.NotificationType;
 import com.ecom.microservice.api.model.Role;
 import com.ecom.microservice.api.model.SignUpRequest;
 import com.ecom.microservice.entity.RoleEntity;
@@ -13,6 +16,7 @@ import com.ecom.microservice.repository.RoleRepository;
 import com.ecom.microservice.repository.UserRepository;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,6 +28,7 @@ import org.springframework.validation.annotation.Validated;
  * Service responsible for authentication.
  */
 @Service
+@Slf4j
 @Validated
 @RequiredArgsConstructor
 public class AuthService {
@@ -32,6 +37,7 @@ public class AuthService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final AuthenticationProvider authenticationProvider;
+    private final NotificationEventPublisherService eventPublisher;
 
     /**
      * Authenticates user with password credentials.
@@ -77,6 +83,17 @@ public class AuthService {
             .build();
 
         userRepository.saveAndFlush(user);
+
+        eventPublisher.publishEvent(
+            NotificationEvent.builder()
+                .type(NotificationType.WELCOME_MESSAGE)
+                .details(
+                    NotificationDetails.builder()
+                        .to(request.email())
+                        .build()
+                )
+                .build()
+        );
 
         return login(new AuthRequest(request.email(), request.password()));
     }
